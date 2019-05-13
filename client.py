@@ -25,7 +25,8 @@ class Kullanıcı:
     try:
       with open(isim, "r") as sertifika:
         self.key = RSA.importKey(sertifika.read())
-    except FileNotFoundError: #Burada sertifikan yok hatası da verebiliriz.
+    except FileNotFoundError:
+      print("Sertifikan yokmuş. Neyseki, şimdilik senin için geçici olarak oluşturuyoruz {}".format(isim))
       with open(isim, "wb") as sertifika:# Şimdilik yeni sertifika oluşturuyor
         anahtar = RSA.generate(1024)
         sertifika.write(anahtar.exportKey())
@@ -50,7 +51,7 @@ class Kullanıcı:
 
   def bağlantıyı_ayarla(self):
     self._bağlantı = socket.socket()  
-    self._bağlantı.connect(('', self._PORT))  
+    self._bağlantı.connect(('', self._PORT))# LAN ile yapacaksak buraya serve ip girmemiz gerekiyor.
 
   def send(self, düz_metin):
     if düz_metin.rfind(':') == -1:
